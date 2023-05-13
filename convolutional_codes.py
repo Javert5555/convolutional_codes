@@ -184,11 +184,11 @@ def get_indexes_min_error_frome_code_word(code_words, possible_code_words):
 
 # число сумматоров: 1-4
 
-def get_possible_inf_words():
+def get_possible_inf_words(len_of_inf_word):
     possible_inf_words = []
-    for i in range(256):
+    for i in range(2**len_of_inf_word):
         binary_list = [int(num) for num in list(bin(i)[2:])]
-        while len(binary_list) < 8:
+        while len(binary_list) < len_of_inf_word:
             binary_list.insert(0, 0)
         possible_inf_words.append(binary_list)
     # print(possible_inf_words)
@@ -235,9 +235,9 @@ def get_code_word(inf_word, gen_polynoms):
 def get_code_words(inf_words, gen_polynoms):
     code_words = []
     for inf_word in inf_words:
-        if (inf_word == [0, 1, 0, 0, 1, 0, 0, 0]):
-            print(inf_word)
-            print(gen_polynoms)
+        # if (inf_word == [0, 1, 0, 0, 1, 0, 0, 0]):
+        #     print(inf_word)
+        #     print(gen_polynoms)
         code_word = get_code_word(deepcopy(inf_word), deepcopy(gen_polynoms))
         code_words.append(code_word)
     return code_words
@@ -256,11 +256,11 @@ def get_gen_polynoms(adders, register_count):
 
 # # получаем список информационных слов из каждой буквы,
 # # преобразуя каждую букву в число (номер, позицию буквы) в unicode, а потом в бинарный вид
-def get_inf_words(text):
+def get_inf_words(text, len_of_inf_word):
     inf_words = [bin(ord(char))[2:] for char in list(text)]
     for i in range(len(inf_words)):
         inf_words[i] = list(inf_words[i])
-        while len(inf_words[i]) < 8:
+        while len(inf_words[i]) < len_of_inf_word:
             inf_words[i].insert(0, 0)
         inf_words[i] = [int(num) for num in inf_words[i]]
     print(inf_words)
@@ -302,6 +302,7 @@ def get_inf_words(text):
 # print(i)
 def get_solution(input_values):
     register_count = 3
+    len_of_inf_word = 12
     adders_count = input_values['count_of_adders']
 
     adders = input_values['adders']
@@ -309,11 +310,11 @@ def get_solution(input_values):
     gen_polynoms = get_gen_polynoms(adders, register_count)
     num_of_errors = input_values['num_of_errors']
     # code_word = get_code_word(deepcopy(i), deepcopy(gen_polynoms))
-    inf_words = get_inf_words(input_values['initial_text'])
+    inf_words = get_inf_words(input_values['initial_text'], len_of_inf_word)
     # print(inf_words)
     # inf_words = [np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1])]
     code_words = get_code_words(deepcopy(inf_words), deepcopy(gen_polynoms))
-    possible_inf_words = get_possible_inf_words()
+    possible_inf_words = get_possible_inf_words(len_of_inf_word)
     possible_code_words = get_code_words(deepcopy(possible_inf_words), deepcopy(gen_polynoms))
     # print(possible_code_words[72])
     # print(possible_code_words.index([0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0]))
