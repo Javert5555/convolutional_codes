@@ -48,3 +48,5 @@ def get_errors_frome_code_word(code_word):
 print(np.polymul([0, 1, 0, 0, 1, 0, 0, 0], [1,0,1]))
 print(np.polymul([0, 1, 0, 0, 1, 0, 0, 0], [1,1,1]))
 # print(chr(int('H', 2)))
+
+print([1,2,3,1].index(min([1,2,3,1])))
