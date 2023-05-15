@@ -198,7 +198,7 @@ def get_possible_inf_words(len_of_inf_word):
 # get_possible_inf_words()
 
 # получить кодовое слово из информационного слова
-def get_code_word(inf_word, gen_polynoms):
+def get_code_word(inf_word, gen_polynoms, adders_count):
     # print(inf_word)
     # print(gen_polynoms)
     secondary_code_words = []
@@ -229,16 +229,17 @@ def get_code_word(inf_word, gen_polynoms):
             # print(secondary_code_word)
             code_word.append(secondary_code_word[len(secondary_code_word) - j-1])
             # print(code_word)
-    return code_word
+    # return code_word # раскоментировать если хотим "обнулять регистры"
+    return code_word[:len(inf_word) * adders_count]
 
 # получить кодовые слова
-def get_code_words(inf_words, gen_polynoms):
+def get_code_words(inf_words, gen_polynoms, adders_count):
     code_words = []
     for inf_word in inf_words:
         # if (inf_word == [0, 1, 0, 0, 1, 0, 0, 0]):
         #     print(inf_word)
         #     print(gen_polynoms)
-        code_word = get_code_word(deepcopy(inf_word), deepcopy(gen_polynoms))
+        code_word = get_code_word(deepcopy(inf_word), deepcopy(gen_polynoms), adders_count)
         code_words.append(code_word)
     return code_words
 
@@ -309,18 +310,14 @@ def get_solution(input_values):
 
     gen_polynoms = get_gen_polynoms(adders, register_count)
     num_of_errors = input_values['num_of_errors']
-    # code_word = get_code_word(deepcopy(i), deepcopy(gen_polynoms))
     inf_words = get_inf_words(input_values['initial_text'], len_of_inf_word)
-    # print(inf_words)
-    # inf_words = [np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1])]
-    code_words = get_code_words(deepcopy(inf_words), deepcopy(gen_polynoms))
-    possible_inf_words = get_possible_inf_words(len_of_inf_word)
-    possible_code_words = get_code_words(deepcopy(possible_inf_words), deepcopy(gen_polynoms))
-    # print(possible_code_words[72])
-    # print(possible_code_words.index([0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0]))
+    code_words = get_code_words(deepcopy(inf_words), deepcopy(gen_polynoms), adders_count)
 
-    # index_of_inf_word = get_errors_frome_code_word(code_words[0], deepcopy(possible_code_words))
+    possible_inf_words = get_possible_inf_words(len_of_inf_word)
+    possible_code_words = get_code_words(deepcopy(possible_inf_words), deepcopy(gen_polynoms), adders_count)
+
     print(code_words)
+
     code_words_text = ''
     for code_word in deepcopy(code_words):
         code_words_text += ''.join([str(num) for num in deepcopy(code_word)])
